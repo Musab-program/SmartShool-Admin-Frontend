@@ -2,16 +2,11 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
+import FooterPage from "@/components/footer/footer";
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 const glorai = Cairo({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,8 +20,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={glorai.className}>
-        <Header />
-        <main>{children}</main>
+        <SidebarProvider>
+          <div className="flex min-h-screen w-full">
+            <AppSidebar />
+            <div className="flex flex-1 flex-col">
+              <Header />
+              <main className="flex-1 p-4">
+                {children}
+              </main>
+              <FooterPage />
+            </div>
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );

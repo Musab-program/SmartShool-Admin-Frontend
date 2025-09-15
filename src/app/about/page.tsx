@@ -3,11 +3,14 @@ import { error } from "console";
 
 
 const AboutPage =  async () => {
-  const response = await fetch("https://localhost:44363/api/Users/GetAllUsers");
+  // const response = await fetch("https://localhost:44363/api/Users/GetAllUsers");
+    const resonse = 10/0
   
-  if (!response.ok){
-    throw new Error("Failed");
-  }
+    // 
+
+      throw new Error("Failed MUSAB");
+    
+  
 
   return (
     <div className="container m-auto px-5 rounded-2xl">
