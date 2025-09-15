@@ -2,9 +2,12 @@ import React from "react";
 
 const FooterPage = () => {
   return (
-    <footer className="relative w-full mb-20">
-      <div className="w-full px-8 mx-auto max-w-7xl">
+    <footer className="relative w-full mb-5">
+      <div dir="rtl" className="w-full px-8 mx-auto max-w-7xl">
         <div className="grid justify-between grid-cols-1 gap-4 md:grid-cols-2">
+          <h5 className="mb-6 text-xl font-semibold text-slate-800">
+            المدرسة الذكية
+          </h5>
           <div className="grid justify-between grid-cols-3 gap-4">
             <ul>
               <p className="block mb-1 text-base font-semibold  text-slate-800">
@@ -118,9 +121,6 @@ const FooterPage = () => {
               </li>
             </ul>
           </div>
-          <h5 className="mb-6 text-xl font-semibold text-slate-800">
-            المدرسة الذكية
-          </h5>
         </div>
         <div className="flex flex-col items-center justify-center w-full py-4 mt-12 border-t border-slate-200 md:flex-row md:justify-between">
           <p className="block mb-4 text-sm text-center text-slate-500 md:mb-0">
