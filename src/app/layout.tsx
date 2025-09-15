@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
-import FooterPage from "@/components/footer/footer";
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 
@@ -28,7 +27,6 @@ export default function RootLayout({
               <main className="flex-1 p-4">
                 {children}
               </main>
-              <FooterPage />
             </div>
           </div>
         </SidebarProvider>
