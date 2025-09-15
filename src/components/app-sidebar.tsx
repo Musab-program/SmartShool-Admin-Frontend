@@ -99,13 +99,14 @@ export function AppSidebar() {
   const isPathActive = (path?: string) => {
     if (!path) return false
     try {
-      // اعتبر المسار نشطًا إذا كان يطابق البداية (يفيد للمستويات الفرعية)
+      // المسار نشط إذا طابق البداية (يدعم المستويات الفرعية)
       return pathname === path || pathname.startsWith(path + "/")
     } catch {
       return false
     }
   }
 
+  // ا��تح الأقسام التي تحتوي على مسار فرعي نشط تلقائياً
   const initialOpen = React.useMemo(() => {
     const o: Record<string, boolean> = {}
     items.forEach((item) => {
