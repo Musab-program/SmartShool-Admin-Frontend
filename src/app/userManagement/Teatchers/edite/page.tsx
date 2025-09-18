@@ -1,8 +1,7 @@
 "use client";
-
-import ClickSpark from "@/components/ClickSpark";
 import React, { useRef, useState } from "react";
 
+// واجهات البيانات المحدثة للمعلم
 type Gender = "male" | "female";
 
 interface BasicInfo {
@@ -13,13 +12,12 @@ interface BasicInfo {
   files: File[];
 }
 
-interface ParentDetails {
-  fatherName: string;
-  fatherContact: string;
-  fatherOccupation: string;
-  motherName: string;
-  motherContact: string;
-  annualIncome: string;
+interface ProfessionalInfo {
+  employeeId: string;
+  designation: string;
+  subject: string;
+  qualifications: string;
+  dateOfJoining: string;
 }
 
 interface LoginDetails {
@@ -38,12 +36,12 @@ interface ContactInfo {
 }
 
 interface AdditionalInfo {
-  isDayScholar: boolean;
-  hasTransport: boolean;
+  yearsOfExperience: number | string;
+  specialRoles: string;
 }
 
 const App = () => {
-  // State for all form fields
+  // حالات النموذج
   const [basicInfo, setBasicInfo] = useState<BasicInfo>({
     firstName: "",
     lastName: "",
@@ -52,13 +50,12 @@ const App = () => {
     files: [],
   });
 
-  const [parentDetails, setParentDetails] = useState<ParentDetails>({
-    fatherName: "",
-    fatherContact: "",
-    fatherOccupation: "",
-    motherName: "",
-    motherContact: "",
-    annualIncome: "",
+  const [professionalInfo, setProfessionalInfo] = useState<ProfessionalInfo>({
+    employeeId: "",
+    designation: "",
+    subject: "",
+    qualifications: "",
+    dateOfJoining: "",
   });
 
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
@@ -77,13 +74,17 @@ const App = () => {
   });
 
   const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfo>({
-    isDayScholar: true,
-    hasTransport: true,
+    yearsOfExperience: "",
+    specialRoles: "",
   });
 
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Handle file drop and selection
+  // معالجة تغيير الملفات
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
     setBasicInfo({ ...basicInfo, files: selectedFiles });
@@ -99,10 +100,10 @@ const App = () => {
     setBasicInfo({ ...basicInfo, files: droppedFiles });
   };
 
-  // Generic handler for all form fields
+  // معالجة تغيير حقول النموذج بشكل عام
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    section: "basic" | "parent" | "login" | "contact" | "additional",
+    section: "basic" | "professional" | "login" | "contact" | "additional",
     field: string
   ) => {
     const target = e.target as HTMLInputElement | HTMLSelectElement;
@@ -110,10 +111,11 @@ const App = () => {
     const nextValue = isCheckbox
       ? (target as HTMLInputElement).checked
       : target.value;
+
     if (section === "basic") {
       setBasicInfo({ ...basicInfo, [field]: nextValue as never });
-    } else if (section === "parent") {
-      setParentDetails({ ...parentDetails, [field]: nextValue as never });
+    } else if (section === "professional") {
+      setProfessionalInfo({ ...professionalInfo, [field]: nextValue as never });
     } else if (section === "login") {
       setLoginDetails({ ...loginDetails, [field]: nextValue as never });
     } else if (section === "contact") {
@@ -123,22 +125,20 @@ const App = () => {
     }
   };
 
-  // Form submission handler
+  // معالجة إرسال النموذج
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Logic to save the form data
     console.log("تم إرسال البيانات:", {
       basicInfo,
-      parentDetails,
+      professionalInfo,
       loginDetails,
       contactInfo,
       additionalInfo,
     });
-    // Add logic here to send data to a backend or process it
-    alert("تم حفظ النموذج! تحقق من وحدة التحكم للبيانات.");
+    setMessage({ type: "success", text: "تم حفظ النموذج بنجاح!" });
   };
 
-  // Reset form handler
+  // معالجة إعادة تعيين النموذج
   const handleReset = () => {
     setBasicInfo({
       firstName: "",
@@ -147,13 +147,12 @@ const App = () => {
       dateOfBirth: "",
       files: [],
     });
-    setParentDetails({
-      fatherName: "",
-      fatherContact: "",
-      fatherOccupation: "",
-      motherName: "",
-      motherContact: "",
-      annualIncome: "",
+    setProfessionalInfo({
+      employeeId: "",
+      designation: "",
+      subject: "",
+      qualifications: "",
+      dateOfJoining: "",
     });
     setLoginDetails({
       username: "",
@@ -169,47 +168,60 @@ const App = () => {
       state: "",
     });
     setAdditionalInfo({
-      isDayScholar: true,
-      hasTransport: true,
+      yearsOfExperience: "",
+      specialRoles: "",
     });
+    setMessage(null);
   };
 
   return (
-    <div dir="rtl" className="p-8 bg-white min-h-screen">
+    <div dir="rtl" className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-6 max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900">إضافة طالب جديد</h1>
+        <h1 className="text-3xl font-bold text-gray-900">إضافة معلم جديد</h1>
         <div className="space-x-4">
           <button
             onClick={handleSubmit}
             className="px-6 py-2 text-white font-semibold bg-lime-700 rounded-lg hover:bg-lime-800 transition-colors"
           >
-            <ClickSpark>حفظ</ClickSpark>
+            حفظ
           </button>
           <button
-            onClick={() => alert("تم الإلغاء.")}
+            onClick={() =>
+              setMessage({ type: "error", text: "تم إلغاء العملية." })
+            }
             className="px-6 py-2 text-gray-200 font-semibold bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
           >
             إلغاء
           </button>
           <button
             onClick={handleReset}
-            className="px-6 py-2 m-2 text-gray-600 font-semibold bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            className="px-6 py-2 text-gray-600 font-semibold bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
           >
             إعادة
           </button>
         </div>
       </div>
 
+      {/* رسالة التأكيد المخصصة */}
+      {message && (
+        <div
+          className={`fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 text-white ${
+            message.type === "success" ? "bg-green-500" : "bg-red-500"
+          }`}
+        >
+          <p>{message.text}</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        {/* Left Column */}
+        {/* العمود الأيمن */}
         <div className="space-y-8">
-          {/* Basic Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* قسم المعلومات الأساسية */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات أساسية
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* First Name */}
               <div>
                 <label
                   htmlFor="firstName"
@@ -227,7 +239,6 @@ const App = () => {
                 />
               </div>
 
-              {/* Last Name */}
               <div>
                 <label
                   htmlFor="lastName"
@@ -247,9 +258,7 @@ const App = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              {/* Gender and Date of Birth */}
               <div className="space-y-6">
-                {/* Gender */}
                 <div>
                   <span className="block text-sm font-medium text-gray-700 mb-2">
                     الجنس
@@ -264,9 +273,7 @@ const App = () => {
                         onChange={(e) => handleChange(e, "basic", "gender")}
                         className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
                       />
-                      <span className="ml-2">
-                        <ClickSpark>ذكر</ClickSpark>
-                      </span>
+                      <span className="ml-2">ذكر</span>
                     </label>
                     <label className="flex items-center text-gray-700">
                       <input
@@ -282,7 +289,6 @@ const App = () => {
                   </div>
                 </div>
 
-                {/* Date of Birth */}
                 <div>
                   <label
                     htmlFor="dob"
@@ -301,43 +307,9 @@ const App = () => {
                     />
                   </div>
                 </div>
-
-                {/* Class and Section */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="class"
-                      className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                    >
-                      الصف
-                    </label>
-                    <select
-                      id="class"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                    >
-                      <option value="">الصف</option>
-                      {/* Add options here */}
-                    </select>
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="section"
-                      className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                    >
-                      الشعبة
-                    </label>
-                    <select
-                      id="section"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                    >
-                      <option value="">الشعبة</option>
-                      {/* Add options here */}
-                    </select>
-                  </div>
-                </div>
               </div>
 
-              {/* File Upload */}
+              {/* قسم رفع الملفات */}
               <div
                 className="relative border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-lime-700 transition duration-200"
                 onDragOver={handleDragOver}
@@ -387,107 +359,96 @@ const App = () => {
             </div>
           </div>
 
-          {/* Parent Details Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* قسم التفاصيل المهنية */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              تفاصيل ولي الأمر
+              التفاصيل المهنية
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label
-                  htmlFor="fatherName"
+                  htmlFor="employeeId"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  اسم الأب
+                  رقم الموظف
                 </label>
                 <input
                   type="text"
-                  id="fatherName"
-                  value={parentDetails.fatherName}
-                  onChange={(e) => handleChange(e, "parent", "fatherName")}
-                  placeholder="اسم الأب"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="motherName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  اسم الأم
-                </label>
-                <input
-                  type="text"
-                  id="motherName"
-                  value={parentDetails.motherName}
-                  onChange={(e) => handleChange(e, "parent", "motherName")}
-                  placeholder="اسم الأم"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="fatherContact"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  معلومات التواصل مع الأب
-                </label>
-                <input
-                  type="tel"
-                  id="fatherContact"
-                  value={parentDetails.fatherContact}
-                  onChange={(e) => handleChange(e, "parent", "fatherContact")}
-                  placeholder="المعلومات الاتصال"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="motherContact"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  معلومات التواصل مع الأم
-                </label>
-                <input
-                  type="tel"
-                  id="motherContact"
-                  value={parentDetails.motherContact}
-                  onChange={(e) => handleChange(e, "parent", "motherContact")}
-                  placeholder="معلومات الاتصال"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="fatherOccupation"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Father Occupation
-                </label>
-                <input
-                  type="text"
-                  id="fatherOccupation"
-                  value={parentDetails.fatherOccupation}
+                  id="employeeId"
+                  value={professionalInfo.employeeId}
                   onChange={(e) =>
-                    handleChange(e, "parent", "fatherOccupation")
+                    handleChange(e, "professional", "employeeId")
                   }
-                  placeholder="Ex: Business"
+                  placeholder="رقم الموظف"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="annualIncome"
+                  htmlFor="designation"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Annual Income
+                  المسمى الوظيفي
                 </label>
                 <input
                   type="text"
-                  id="annualIncome"
-                  value={parentDetails.annualIncome}
-                  onChange={(e) => handleChange(e, "parent", "annualIncome")}
-                  placeholder="1,00,000"
+                  id="designation"
+                  value={professionalInfo.designation}
+                  onChange={(e) =>
+                    handleChange(e, "professional", "designation")
+                  }
+                  placeholder="مثال: معلم صف، منسق"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  المادة
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  value={professionalInfo.subject}
+                  onChange={(e) => handleChange(e, "professional", "subject")}
+                  placeholder="مثال: الرياضيات، الفيزياء"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="qualifications"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  المؤهلات
+                </label>
+                <input
+                  type="text"
+                  id="qualifications"
+                  value={professionalInfo.qualifications}
+                  onChange={(e) =>
+                    handleChange(e, "professional", "qualifications")
+                  }
+                  placeholder="مثال: بكالوريوس في التعليم"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="dateOfJoining"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  تاريخ الانضمام
+                </label>
+                <input
+                  type="date"
+                  id="dateOfJoining"
+                  value={professionalInfo.dateOfJoining}
+                  onChange={(e) =>
+                    handleChange(e, "professional", "dateOfJoining")
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
                 />
               </div>
@@ -495,10 +456,10 @@ const App = () => {
           </div>
         </div>
 
-        {/* Right Column */}
+        {/* العمود الأيسر */}
         <div className="space-y-8">
-          {/* Login/Account Details Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* قسم تفاصيل الدخول/الحساب */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               تفاصيل الدخول/الحساب
             </h3>
@@ -538,8 +499,8 @@ const App = () => {
             </div>
           </div>
 
-          {/* Contact Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* قسم معلومات الاتصال */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات الاتصال
             </h3>
@@ -661,75 +622,47 @@ const App = () => {
             </div>
           </div>
 
-          {/* Additional Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          {/* قسم معلومات إضافية */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات إضافية
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="scholarship"
-                    checked={additionalInfo.isDayScholar}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        isDayScholar: true,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">طالب نهاري</span>
+              <div>
+                <label
+                  htmlFor="yearsOfExperience"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  سنوات الخبرة
                 </label>
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="scholarship"
-                    checked={!additionalInfo.isDayScholar}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        isDayScholar: false,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">طالب مقيم</span>
-                </label>
+                <input
+                  type="number"
+                  id="yearsOfExperience"
+                  value={additionalInfo.yearsOfExperience}
+                  onChange={(e) =>
+                    handleChange(e, "additional", "yearsOfExperience")
+                  }
+                  placeholder="عدد السنوات"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                />
               </div>
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="transport"
-                    checked={additionalInfo.hasTransport}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        hasTransport: true,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">مواصلات</span>
+              <div>
+                <label
+                  htmlFor="specialRoles"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  أدوار خاصة (إن وجدت)
                 </label>
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="transport"
-                    checked={!additionalInfo.hasTransport}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        hasTransport: false,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">بدون مواصلات</span>
-                </label>
+                <input
+                  type="text"
+                  id="specialRoles"
+                  value={additionalInfo.specialRoles}
+                  onChange={(e) =>
+                    handleChange(e, "additional", "specialRoles")
+                  }
+                  placeholder="مثال: منسق قسم، مدرب"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                />
               </div>
             </div>
           </div>

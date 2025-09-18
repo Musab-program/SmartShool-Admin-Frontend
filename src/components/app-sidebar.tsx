@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Home,
   Users,
@@ -12,7 +12,7 @@ import {
   Calendar,
   CheckSquare,
   ChevronDown,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -30,8 +30,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
-} from "@/components/ui/sidebar"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 const items = [
   {
@@ -91,55 +91,67 @@ const items = [
     url: "/attendance",
     icon: CheckSquare,
   },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const isPathActive = (path?: string) => {
-    if (!path) return false
+    if (!path) return false;
     try {
       // المسار نشط إذا طابق البداية (يدعم المستويات الفرعية)
-      return pathname === path || pathname.startsWith(path + "/")
+      return pathname === path || pathname.startsWith(path + "/");
     } catch {
-      return false
+      return false;
     }
-  }
+  };
 
   // ا��تح الأقسام التي تحتوي على مسار فرعي نشط تلقائياً
   const initialOpen = React.useMemo(() => {
-    const o: Record<string, boolean> = {}
+    const o: Record<string, boolean> = {};
     items.forEach((item) => {
       if (item.subItems?.length) {
-        o[item.title] = item.subItems.some((s) => isPathActive(s.url))
+        o[item.title] = item.subItems.some((s) => isPathActive(s.url));
       }
-    })
-    return o
-  }, [pathname])
+    });
+    return o;
+  }, [pathname]);
 
-  const [openSections, setOpenSections] = React.useState<Record<string, boolean>>(initialOpen)
+  const [openSections, setOpenSections] =
+    React.useState<Record<string, boolean>>(initialOpen);
 
   React.useEffect(() => {
     setOpenSections((prev) => {
-      const next = { ...prev }
+      const next = { ...prev };
       items.forEach((item) => {
-        if (item.subItems?.length && item.subItems.some((s) => isPathActive(s.url))) {
-          next[item.title] = true
+        if (
+          item.subItems?.length &&
+          item.subItems.some((s) => isPathActive(s.url))
+        ) {
+          next[item.title] = true;
         }
-      })
-      return next
-    })
-  }, [pathname])
+      });
+      return next;
+    });
+  }, [pathname]);
 
   return (
-    <Sidebar variant="floating" collapsible="icon" className="group-data-[variant=floating]:px-2">
+    <Sidebar
+      variant="floating"
+      collapsible="icon"
+      className="group-data-[variant=floating]:px-2"
+    >
       <SidebarHeader className="p-3">
         <div className="rounded-lg border bg-gradient-to-br from-sidebar to-sidebar-accent/60 p-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex min-w-0 items-center gap-2">
-              <div className="size-8 shrink-0 rounded-md bg-primary/10 text-primary grid place-items-center font-semibold">S</div>
+              <div className="size-8 shrink-0 rounded-md bg-primary/10 text-primary grid place-items-center font-semibold">
+                S
+              </div>
               <div className="truncate">
-                <div className="text-sm font-semibold leading-5">المدرسة الذكية</div>
+                <div className="text-sm font-semibold leading-5">
+                  المدرسة الذكية
+                </div>
                 <div className="text-xs text-muted-foreground">لوحة التحكم</div>
               </div>
             </div>
@@ -155,17 +167,21 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="gap-1.5">
               {items.map((item) => {
-                const hasChildren = !!item.subItems?.length
-                const mainActive = isPathActive(item.url)
-                const anyChildActive = hasChildren && item.subItems!.some((s) => isPathActive(s.url))
-                const isOpen = hasChildren ? (openSections[item.title] ?? anyChildActive) : false
+                const hasChildren = !!item.subItems?.length;
+                const mainActive = isPathActive(item.url);
+                const anyChildActive =
+                  hasChildren &&
+                  item.subItems!.some((s) => isPathActive(s.url));
+                const isOpen = hasChildren
+                  ? openSections[item.title] ?? anyChildActive
+                  : false;
 
                 const ItemInner = (
                   <>
                     {item.icon ? <item.icon className="shrink-0" /> : null}
                     <span className="truncate">{item.title}</span>
                   </>
-                )
+                );
 
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -200,14 +216,19 @@ export function AppSidebar() {
                         <SidebarMenuAction
                           aria-label="Toggle section"
                           onClick={(e) => {
-                            e.stopPropagation()
+                            e.stopPropagation();
                             setOpenSections((s) => ({
                               ...s,
                               [item.title]: !isOpen,
-                            }))
+                            }));
                           }}
                         >
-                          <ChevronDown className={cn("transition-transform", isOpen ? "rotate-0" : "-rotate-90")} />
+                          <ChevronDown
+                            className={cn(
+                              "transition-transform",
+                              isOpen ? "rotate-0" : "-rotate-90"
+                            )}
+                          />
                         </SidebarMenuAction>
                       </>
                     )}
@@ -229,7 +250,7 @@ export function AppSidebar() {
                       </SidebarMenuSub>
                     )}
                   </SidebarMenuItem>
-                )
+                );
               })}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -244,7 +265,11 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton size="lg" className="h-10 rounded-md [&>svg]:size-5" tooltip="الدعم والمساعدة">
+                <SidebarMenuButton
+                  size="lg"
+                  className="h-10 rounded-md [&>svg]:size-5"
+                  tooltip="الدعم والمساعدة"
+                >
                   <span>الدعم والمساعدة</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -259,5 +284,5 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

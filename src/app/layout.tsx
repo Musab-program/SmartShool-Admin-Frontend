@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import Footer from "@/components/footer/Footer";
-
-
-const glorai = Cairo({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Smart School",
@@ -19,15 +16,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={glorai.className}>
+      <body>
         <SidebarProvider>
           <div className="flex min-h-screen w-full">
             <AppSidebar />
             <div className="flex flex-1 flex-col">
               <Header />
-              <main className="flex-1 p-4">
-                {children}
-              </main>
+              <main className="flex-1 p-4">{children}</main>
             </div>
           </div>
         </SidebarProvider>
