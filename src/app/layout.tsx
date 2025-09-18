@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import Footer from "@/components/footer/Footer";
 
 
 const glorai = Cairo({ subsets: ["latin"] });
@@ -27,6 +28,7 @@ export default function RootLayout({
               <main className="flex-1 p-4">
                 {children}
               </main>
+              <Footer/>
             </div>
           </div>
         </SidebarProvider>
