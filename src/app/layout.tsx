@@ -28,7 +28,6 @@ export default function RootLayout({
               <main className="flex-1 p-4">
                 {children}
               </main>
-              <Footer/>
             </div>
           </div>
         </SidebarProvider>
