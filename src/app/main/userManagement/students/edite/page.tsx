@@ -3,6 +3,22 @@
 import ClickSpark from "@/components/ClickSpark";
 import React, { useRef, useState } from "react";
 
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Label } from "@/components/ui/label";
 type Gender = "male" | "female";
 
 interface BasicInfo {
@@ -174,6 +190,83 @@ const App = () => {
     });
   };
 
+  type CreateGuardianPayload = {
+    fullName: string;
+    phone: string;
+    email?: string;
+    relation: string;
+    nationalId?: string;
+    address?: string;
+    notes?: string;
+  };
+
+  // export default function Page() {
+  // const router = useRouter();
+  const [, setSubmitting] = useState(false);
+  const [, setError] = useState<string | null>(null);
+  const [, setSuccess] = useState<string | null>(null);
+
+  const [form, setForm] = useState<CreateGuardianPayload>({
+    fullName: "",
+    phone: "",
+    email: "",
+    relation: "father",
+    nationalId: "",
+    address: "",
+    notes: "",
+  });
+
+  const handleChangeParent =
+    (field: keyof CreateGuardianPayload) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+  async function handleSubmitParent(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!form.fullName.trim()) {
+      setError("الاسم الكامل مطلوب");
+      return;
+    }
+    if (!/^\+?\d{8,15}$/.test(form.phone.trim())) {
+      setError("رقم الجوال غير صالح");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/guardians", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.message || "تعذر إضافة ولي الأمر");
+      }
+
+      setSuccess("تمت إضافة ولي الأمر بنجاح");
+      setForm({
+        fullName: "",
+        phone: "",
+        email: "",
+        relation: "father",
+        nationalId: "",
+        address: "",
+        notes: "",
+      });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "حدث خطأ غير متوقع";
+      setError(message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div dir="rtl" className="p-8 bg-white min-h-screen">
       <div className="flex justify-between items-center mb-6 max-w-6xl mx-auto">
@@ -204,9 +297,9 @@ const App = () => {
         {/* Left Column */}
         <div className="space-y-8">
           {/* Basic Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg drop-shadow-lg">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              معلومات أساسية
+              معلومات الطالب أساسية
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* First Name */}
@@ -215,32 +308,30 @@ const App = () => {
                   htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  الاسم الأول
+                  اسم الطالب
                 </label>
                 <input
                   type="text"
                   id="firstName"
                   value={basicInfo.firstName}
                   onChange={(e) => handleChange(e, "basic", "firstName")}
-                  placeholder="الاسم الأول"
+                  placeholder="الاسم الرباعي للطالب"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
                 />
               </div>
-
-              {/* Last Name */}
               <div>
                 <label
-                  htmlFor="lastName"
+                  htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  الاسم الاخير
+                  كلمة المرور
                 </label>
                 <input
-                  type="text"
-                  id="lastName"
-                  value={basicInfo.lastName}
-                  onChange={(e) => handleChange(e, "basic", "lastName")}
-                  placeholder="الاسم الاخير"
+                  type="password"
+                  id="password"
+                  value={loginDetails.password}
+                  onChange={(e) => handleChange(e, "login", "password")}
+                  placeholder="كلمة المرور"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
                 />
               </div>
@@ -385,165 +476,7 @@ const App = () => {
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Parent Details Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              تفاصيل ولي الأمر
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label
-                  htmlFor="fatherName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  اسم الأب
-                </label>
-                <input
-                  type="text"
-                  id="fatherName"
-                  value={parentDetails.fatherName}
-                  onChange={(e) => handleChange(e, "parent", "fatherName")}
-                  placeholder="اسم الأب"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="motherName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  اسم الأم
-                </label>
-                <input
-                  type="text"
-                  id="motherName"
-                  value={parentDetails.motherName}
-                  onChange={(e) => handleChange(e, "parent", "motherName")}
-                  placeholder="اسم الأم"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="fatherContact"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  معلومات التواصل مع الأب
-                </label>
-                <input
-                  type="tel"
-                  id="fatherContact"
-                  value={parentDetails.fatherContact}
-                  onChange={(e) => handleChange(e, "parent", "fatherContact")}
-                  placeholder="المعلومات الاتصال"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="motherContact"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  معلومات التواصل مع الأم
-                </label>
-                <input
-                  type="tel"
-                  id="motherContact"
-                  value={parentDetails.motherContact}
-                  onChange={(e) => handleChange(e, "parent", "motherContact")}
-                  placeholder="معلومات الاتصال"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="fatherOccupation"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Father Occupation
-                </label>
-                <input
-                  type="text"
-                  id="fatherOccupation"
-                  value={parentDetails.fatherOccupation}
-                  onChange={(e) =>
-                    handleChange(e, "parent", "fatherOccupation")
-                  }
-                  placeholder="Ex: Business"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="annualIncome"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Annual Income
-                </label>
-                <input
-                  type="text"
-                  id="annualIncome"
-                  value={parentDetails.annualIncome}
-                  onChange={(e) => handleChange(e, "parent", "annualIncome")}
-                  placeholder="1,00,000"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-8">
-          {/* Login/Account Details Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              تفاصيل الدخول/الحساب
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  اسم المستخدم
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  value={loginDetails.username}
-                  onChange={(e) => handleChange(e, "login", "username")}
-                  placeholder="اسم المستخدم"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  كلمة المرور
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={loginDetails.password}
-                  onChange={(e) => handleChange(e, "login", "password")}
-                  placeholder="كلمة المرور"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              معلومات الاتصال
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex justify-between mt-4 max-w-6xl mx-auto">
               <div>
                 <label
                   htmlFor="phone"
@@ -577,161 +510,102 @@ const App = () => {
                 />
               </div>
             </div>
-            <div className="mt-6">
-              <label
-                htmlFor="address"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                العنوان
-              </label>
-              <input
-                type="text"
-                id="address"
-                value={contactInfo.address}
-                onChange={(e) => handleChange(e, "contact", "address")}
-                placeholder="الحي والشارع"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <div>
-                <label
-                  htmlFor="location"
-                  className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                >
-                  الموقع
-                </label>
-                <input
-                  type="text"
-                  id="location"
-                  value={contactInfo.location}
-                  onChange={(e) => handleChange(e, "contact", "location")}
-                  placeholder="الموقع"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="district"
-                  className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                >
-                  المنطقة
-                </label>
-                <input
-                  type="text"
-                  id="district"
-                  value={contactInfo.district}
-                  onChange={(e) => handleChange(e, "contact", "district")}
-                  placeholder="المنطقة"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="pincode"
-                  className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                >
-                  الرمز البريدي
-                </label>
-                <input
-                  type="text"
-                  id="pincode"
-                  value={contactInfo.pincode}
-                  onChange={(e) => handleChange(e, "contact", "pincode")}
-                  placeholder="الرمز البريدي"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="state"
-                  className="block text-sm font-medium text-gray-700 mb-1 sr-only"
-                >
-                  الولاية/المحافظة
-                </label>
-                <input
-                  type="text"
-                  id="state"
-                  value={contactInfo.state}
-                  onChange={(e) => handleChange(e, "contact", "state")}
-                  placeholder="الولاية/المحافظة"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-            </div>
           </div>
+        </div>
 
-          {/* Additional Information Section */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+        {/* Right Column */}
+        <div className="space-y-8">
+          {/* Login/Account Details Section */}
+          <div className="bg-white p-6 rounded-lg drop-shadow-lg pb-15">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
-              معلومات إضافية
+              معلومات ولي الأمر
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="scholarship"
-                    checked={additionalInfo.isDayScholar}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        isDayScholar: true,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">طالب نهاري</span>
-                </label>
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="scholarship"
-                    checked={!additionalInfo.isDayScholar}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        isDayScholar: false,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">طالب مقيم</span>
-                </label>
-              </div>
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="transport"
-                    checked={additionalInfo.hasTransport}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        hasTransport: true,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">مواصلات</span>
-                </label>
-                <label className="flex items-center text-gray-700">
-                  <input
-                    type="radio"
-                    name="transport"
-                    checked={!additionalInfo.hasTransport}
-                    onChange={() =>
-                      setAdditionalInfo({
-                        ...additionalInfo,
-                        hasTransport: false,
-                      })
-                    }
-                    className="form-radio h-4 w-6 text-lime-700 focus:ring-lime-700"
-                  />
-                  <span className="ml-2">بدون مواصلات</span>
-                </label>
-              </div>
-            </div>
+            <CardContent>
+              <form onSubmit={handleSubmitParent} className="space-y-6">
+                {/* الحقول في Grid متجاوبة */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">
+                      الاسم الكامل<span className="text-destructive"> *</span>
+                    </Label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      value={form.fullName}
+                      onChange={handleChangeParent("fullName")}
+                      placeholder="مثال: أحمد محمد عبدالله"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">
+                      رقم الجوال<span className="text-destructive"> *</span>
+                    </Label>
+                    <input
+                      id="phone"
+                      value={form.phone}
+                      onChange={handleChangeParent("phone")}
+                      placeholder="مثال: 9665xxxxxxxx"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                      inputMode="tel"
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">البريد الإلكتروني</Label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="example@email.com"
+                      value={form.email}
+                      onChange={handleChangeParent("email")}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                    />
+                  </div>
+                  <div className="space-y-2 focus:outline-none focus:ring-2 focus:ring-lime-700">
+                    <Label>صلة القرابة</Label>
+                    <Select
+                      value={form.relation}
+                      onValueChange={(v) =>
+                        setForm((p) => ({ ...p, relation: v }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر صلة القرابة" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="father">أب</SelectItem>
+                        <SelectItem value="mother">أم</SelectItem>
+                        <SelectItem value="brother">أخ</SelectItem>
+                        <SelectItem value="sister">أخت</SelectItem>
+                        <SelectItem value="guardian">ولي أمر آخر</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nationalId">رقم الهوية</Label>
+                    <input
+                      id="nationalId"
+                      placeholder="رقم الهوية الوطنية/الإقامة"
+                      value={form.nationalId}
+                      onChange={handleChangeParent("nationalId")}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="address">العنوان</Label>
+                    <input
+                      id="address"
+                      placeholder="المدينة، الحي، الشارع"
+                      value={form.address}
+                      onChange={handleChangeParent("address")}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
+                    />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
           </div>
         </div>
       </div>

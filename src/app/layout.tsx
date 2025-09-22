@@ -5,7 +5,7 @@ import "./globals.css";
 // import { Providers } from "./provider/providers";
 import { Providers } from "./providers";  // import { Providers } from "./providers";
 
-const cairo = Cairo({ subsets: ["arabic"] });
+// const cairo = Cairo({ subsets: ["arabic"] });
 
 export const metadata: Metadata = {
   title: "Smart School",
@@ -17,7 +17,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={cairo.className}>
+      <body>
         {children}
         {/* <Providers>{children}</Providers> */}
       </body>
