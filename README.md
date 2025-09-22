@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart School Admin Frontend
 
-## Getting Started
+نظام إدارة المدرسة الذكية - واجهة المستخدم الأمامية
 
-First, run the development server:
+## هيكل المشروع
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+project-root/
+│── .next/                  # ملفات البناء التلقائي (Auto-generated)
+│── node_modules/           # مكتبة الحزم (Packages)
+│── public/                 # ملفات ثابتة: صور، أيقونات، ملفات PDF...
+│   ├── favicon.ico
+│   ├── images/
+│   └── logo.png
+│
+│── src/                    # المجلد الأساسي للمشروع (Best Practice)
+│   ├── app/                # نظام Routing (App Router في Next.js 13+)
+│   │   ├── layout.tsx      # Layout رئيسي
+│   │   ├── page.tsx        # الصفحة الرئيسية
+│   │   ├── dashboard/      # صفحات لوحة التحكم
+│   │   │   ├── page.tsx
+│   │   │   └── students/
+│   │   │       ├── page.tsx
+│   │   │       └── [id]/   # صفحات ديناميكية
+│   │   │           └── page.tsx
+│   │   └── auth/           # صفحات الدخول والتسجيل
+│   │       ├── login/page.tsx
+│   │       ├── register/page.tsx
+│   │       └── forgot-password/page.tsx
+│   │
+│   ├── components/         # جميع الـ UI Components
+│   │   ├── common/         # عناصر مشتركة (Button, Modal, Navbar, Sidebar...)
+│   │   ├── forms/          # مكونات النماذج (Inputs, Select, DatePicker...)
+│   │   ├── dashboard/      # Widgets خاصة باللوحة (Cards, Charts...)
+│   │   ├── header/         # مكونات الهيدر
+│   │   ├── footer/         # مكونات الفوتر
+│   │   └── ui/             # مكونات UI الأساسية
+│   │
+│   ├── hooks/              # React Hooks مخصصة (useAuth, useFetch...)
+│   │   ├── use-mobile.ts
+│   │   └── useAuth.ts
+│   │
+│   ├── lib/                # Utilities عامة (API clients, Helpers, Config)
+│   │   ├── api.ts          # Axios instance أو fetch wrapper
+│   │   ├── auth.ts         # توابع JWT/Session
+│   │   ├── helpers.ts
+│   │   └── utils.ts
+│   │
+│   ├── store/              # State Management (Zustand/Redux)
+│   │   └── userStore.ts
+│   │
+│   ├── services/           # طبقة الاتصال بالـ API
+│   │   ├── authService.ts
+│   │   ├── studentService.ts
+│   │   └── courseService.ts
+│   │
+│   ├── styles/             # CSS & Tailwind configs
+│   │   └── tailwind.css
+│   │
+│   └── types/              # TypeScript types/interfaces
+│       ├── user.d.ts
+│       ├── course.d.ts
+│       └── api.d.ts
+│
+│── .env.local              # متغيرات البيئة (API Keys, DB URL...)
+│── tailwind.config.js      # إعدادات Tailwind
+│── postcss.config.js
+│── tsconfig.json           # TypeScript config
+│── package.json
+│── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## الميزات
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### ✅ تم تطبيقها:
+- **Header ثابت**: لا يتحرك مع الـ scrolling
+- **Sidebar متجاوب**: يظهر الأيقونات فقط عند التصغير
+- **تصميم متجاوب**: يعمل على جميع الأجهزة
+- **صفحات المصادقة**: تسجيل الدخول، التسجيل، استعادة كلمة المرور
+- **لوحة التحكم**: إدارة الطلاب مع صفحات تفصيلية
+- **هيكل منظم**: مجلدات منفصلة لكل نوع من المكونات
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🔄 قيد التطوير:
+- **إدارة المعلمين**: صفحات إدارة المعلمين
+- **إدارة الصفوف**: صفحات إدارة الصفوف والمجموعات
+- **الاختبارات**: نظام إدارة الاختبارات
+- **التقارير**: تقارير مفصلة عن الأداء
 
-## Learn More
+## التقنيات المستخدمة
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 14**: إطار العمل الرئيسي
+- **TypeScript**: للكتابة الآمنة
+- **Tailwind CSS**: للتصميم
+- **Lucide React**: للأيقونات
+- **React Icons**: لأيقونات إضافية
+- **Zustand**: لإدارة الحالة
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## كيفية التشغيل
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **تثبيت الحزم**:
+   ```bash
+   npm install
+   ```
 
-## Deploy on Vercel
+2. **تشغيل المشروع**:
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **فتح المتصفح**:
+   ```
+   http://localhost:3000
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## الصفحات المتاحة
+
+- `/` - الصفحة الرئيسية
+- `/auth/login` - تسجيل الدخول
+- `/auth/register` - إنشاء حساب جديد
+- `/auth/forgot-password` - استعادة كلمة المرور
+- `/dashboard` - لوحة التحكم الرئيسية
+- `/dashboard/students` - إدارة الطلاب
+- `/dashboard/students/[id]` - تفاصيل الطالب
+
+## المساهمة
+
+1. Fork المشروع
+2. إنشاء فرع للميزة الجديدة
+3. Commit التغييرات
+4. Push إلى الفرع
+5. إنشاء Pull Request
+
+## الترخيص
+
+هذا المشروع مرخص تحت رخصة MIT.

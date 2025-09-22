@@ -12,6 +12,7 @@ import {
   Calendar,
   CheckSquare,
   ChevronDown,
+  GraduationCap,
 } from "lucide-react";
 
 import {
@@ -45,15 +46,15 @@ const items = [
     subItems: [
       {
         title: "الطلاب",
-        url: "/users/students",
+        url: "/main/userManagement/students/main",
       },
       {
         title: "المعلمين",
-        url: "/users/teachers",
+        url: "userManagement/teachers",
       },
       {
         title: "اولياء الامور",
-        url: "/users/parents",
+        url: "userManagement/guardian"
       },
     ],
   },
@@ -142,13 +143,13 @@ export function AppSidebar() {
       className="group-data-[variant=floating]:px-2"
     >
       <SidebarHeader className="p-3">
-        <div className="rounded-lg border bg-gradient-to-br from-sidebar to-sidebar-accent/60 p-3 shadow-sm">
+        <div className="rounded-lg border bg-gradient-to-br from-sidebar to-sidebar-accent/60 p-3 shadow-sm group-data-[collapsible=icon]:p-1">
           <div className="flex items-center justify-between">
-            <div className="flex min-w-0 items-center gap-2">
-              <div className="size-8 shrink-0 rounded-md bg-primary/10 text-primary grid place-items-center font-semibold">
-                S
+            <div className="flex min-w-0 items-center gap-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0">
+              <div className="size-8 shrink-0 rounded-md bg-primary/10 text-primary grid place-items-center group-data-[collapsible=icon]:size-7">
+                <GraduationCap className="h-4 w-4" />
               </div>
-              <div className="truncate">
+              <div className="truncate group-data-[collapsible=icon]:hidden">
                 <div className="text-sm font-semibold leading-5">
                   المدرسة الذكية
                 </div>
@@ -161,7 +162,7 @@ export function AppSidebar() {
 
       <SidebarContent className="gap-3 px-2 pb-3">
         <SidebarGroup className="gap-1">
-          <SidebarGroupLabel className="px-3 text-[11px] font-medium tracking-wide text-muted-foreground">
+          <SidebarGroupLabel className="px-3 text-[11px] font-medium tracking-wide text-muted-foreground group-data-[collapsible=icon]:hidden">
             القائمة الرئيسية
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -179,7 +180,7 @@ export function AppSidebar() {
                 const ItemInner = (
                   <>
                     {item.icon ? <item.icon className="shrink-0" /> : null}
-                    <span className="truncate">{item.title}</span>
+                    <span className="truncate group-data-[collapsible=icon]:hidden">{item.title}</span>
                   </>
                 );
 
@@ -215,6 +216,7 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                         <SidebarMenuAction
                           aria-label="Toggle section"
+                          className="group-data-[collapsible=icon]:hidden"
                           onClick={(e) => {
                             e.stopPropagation();
                             setOpenSections((s) => ({
@@ -234,7 +236,7 @@ export function AppSidebar() {
                     )}
 
                     {hasChildren && isOpen && (
-                      <SidebarMenuSub className="mt-1">
+                      <SidebarMenuSub className="mt-1 group-data-[collapsible=icon]:hidden">
                         {item.subItems!.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton
@@ -259,7 +261,7 @@ export function AppSidebar() {
         <SidebarSeparator />
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 text-[11px] font-medium tracking-wide text-muted-foreground">
+          <SidebarGroupLabel className="px-3 text-[11px] font-medium tracking-wide text-muted-foreground group-data-[collapsible=icon]:hidden">
             اخرى
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -270,7 +272,7 @@ export function AppSidebar() {
                   className="h-10 rounded-md [&>svg]:size-5"
                   tooltip="الدعم والمساعدة"
                 >
-                  <span>الدعم والمساعدة</span>
+                  <span className="group-data-[collapsible=icon]:hidden">الدعم والمساعدة</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -279,7 +281,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="mt-auto px-3 pb-3">
-        <div className="rounded-lg border bg-card p-3 text-xs text-muted-foreground">
+        <div className="rounded-lg border bg-card p-3 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
           نسخة النظام: 1.0.0
         </div>
       </SidebarFooter>

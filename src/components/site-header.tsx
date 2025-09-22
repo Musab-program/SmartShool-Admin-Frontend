@@ -21,7 +21,7 @@ export function SiteHeader() {
   
   return (
     <header className={cn(
-      "flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-all duration-200",
+      "fixed top-0 left-0 right-0 z-50 flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-all duration-200 bg-white/95 backdrop-blur-sm shadow-md",
       // عند إغلاق الـ sidebar على الشاشات الكبيرة - يظهر على كامل الصفحة
       !isMobile && state === "collapsed" && "w-full",
       // عند فتح الـ sidebar على الشاشات الكبيرة - يتكيف مع المساحة المتاحة
@@ -57,11 +57,7 @@ export function SiteHeader() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder={cn(
-              "Search...",
-              // تغيير النص عند تصغير الـ sidebar
-              !isMobile && state === "collapsed" && "Search"
-            )}
+            placeholder="Search..."
             className={cn(
               "pl-8 transition-all duration-200",
               // تقليل عرض حقل البحث عند تصغير الـ sidebar

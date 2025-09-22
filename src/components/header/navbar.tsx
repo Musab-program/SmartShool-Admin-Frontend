@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import styles from "./header.module.css";
 import { GrTechnology } from "react-icons/gr";
 import { MdClose, MdMenu } from "react-icons/md";
-import path from "path";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);

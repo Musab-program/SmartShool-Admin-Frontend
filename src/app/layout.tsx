@@ -1,10 +1,11 @@
+// File: app/layout.tsx
 import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header/header";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import Footer from "@/components/footer/Footer";
+// import { Providers } from "./provider/providers";
+import { Providers } from "./providers";  // import { Providers } from "./providers";
+
+const cairo = Cairo({ subsets: ["arabic"] });
 
 export const metadata: Metadata = {
   title: "Smart School",
@@ -15,17 +16,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>
-        <SidebarProvider>
-          <div className="flex min-h-screen w-full">
-            <AppSidebar />
-            <div className="flex flex-1 flex-col">
-              <Header />
-              <main className="flex-1 p-4">{children}</main>
-            </div>
-          </div>
-        </SidebarProvider>
+    <html lang="ar" dir="rtl">
+      <body className={cairo.className}>
+        {children}
+        {/* <Providers>{children}</Providers> */}
       </body>
     </html>
   );
