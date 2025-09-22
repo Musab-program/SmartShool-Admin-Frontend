@@ -146,6 +146,13 @@ body {
   --sidebar-border:oklch(1 0 0 / 10%);
   --sidebar-ring:oklch(0.556 0 0);
 }
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Regular.ttf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
  @layer base {
   * {

@@ -16,7 +16,7 @@ import {
 export function SimpleRegistrationForm() {
   return (
     <Card
-      className="w-full max-w-sm sm:max-w-md md:max-w-5xl lg:max-w-5xl xl:max-w-5xl py-10 px-6 sm:px-12 md:px-16 lg:px-24 rounded-3xl bg-white shadow-xl transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
+      className="w-full max-w-sm w-  sm:max-w-md md:max-w-5xl lg:max-w-5xl xl:max-w-5xl py-10 px-6 sm:px-12 md:px-16 lg:px-24 rounded-3xl bg-white shadow-xl transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
       color="transparent"
       shadow={false}
     >
