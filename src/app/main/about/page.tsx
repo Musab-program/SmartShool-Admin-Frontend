@@ -24,3 +24,8 @@ export default AboutPage
 /*
 
 */
+
+
+// rm -rf node_modules
+// rm package-lock.json
+// # أو rm yarn.lock إذا كنت تستخدم Yarn

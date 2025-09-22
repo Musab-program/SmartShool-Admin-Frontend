@@ -4,6 +4,6 @@
 import React from "react";
 import { ThemeProvider } from "@material-tailwind/react";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function MainProviders({ children }: { children: React.ReactNode }) {
   return <ThemeProvider>{children}</ThemeProvider>;
 }
