@@ -20,8 +20,8 @@ export default function RootLayout({
   return (
     <html  >
       <body className={`Cairo`}>
-        {/* {children} */}
-        <MainProviders>{children}</MainProviders>
+        {children}
+        {/* <MainProviders>{children}</MainProviders>*/}
       </body>
     </html>
   );

@@ -205,7 +205,7 @@ const App = () => {
       {/* رسالة التأكيد المخصصة */}
       {message && (
         <div
-          className={`fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 text-white ${
+          className={`fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg drop-shadow-lg z-50 text-white ${
             message.type === "success" ? "bg-green-500" : "bg-red-500"
           }`}
         >
@@ -217,7 +217,7 @@ const App = () => {
         {/* العمود الأيمن */}
         <div className="space-y-8">
           {/* قسم المعلومات الأساسية */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-lg drop-shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات أساسية
             </h3>
@@ -227,31 +227,14 @@ const App = () => {
                   htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  الاسم الأول
+                  اسم المعلم
                 </label>
                 <input
                   type="text"
                   id="firstName"
                   value={basicInfo.firstName}
                   onChange={(e) => handleChange(e, "basic", "firstName")}
-                  placeholder="الاسم الأول"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  الاسم الاخير
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  value={basicInfo.lastName}
-                  onChange={(e) => handleChange(e, "basic", "lastName")}
-                  placeholder="الاسم الاخير"
+                  placeholder="الاسم الرباعي للمعلم"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lime-700"
                 />
               </div>
@@ -360,7 +343,7 @@ const App = () => {
           </div>
 
           {/* قسم التفاصيل المهنية */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-lg drop-shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               التفاصيل المهنية
             </h3>
@@ -459,7 +442,7 @@ const App = () => {
         {/* العمود الأيسر */}
         <div className="space-y-8">
           {/* قسم تفاصيل الدخول/الحساب */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-lg drop-shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               تفاصيل الدخول/الحساب
             </h3>
@@ -500,7 +483,7 @@ const App = () => {
           </div>
 
           {/* قسم معلومات الاتصال */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-lg drop-shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات الاتصال
             </h3>
@@ -623,7 +606,7 @@ const App = () => {
           </div>
 
           {/* قسم معلومات إضافية */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-lg drop-shadow-md">
             <h3 className="text-xl font-semibold mb-6 text-gray-800 border-b pb-4">
               معلومات إضافية
             </h3>
