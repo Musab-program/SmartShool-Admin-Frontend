@@ -70,11 +70,29 @@ const TABLE_ROWS = [
     parent: " حمود على ",
     phone: "773219299",
   },
+  {
+    no: 6,
+    name: "علي حمود",
+    class: "12-A",
+    division: "ا",
+    address: "السنينة",
+    parent: " حمود على ",
+    phone: "773219299",
+  },
+  {
+    no: 7,
+    name: "علي حمود",
+    class: "12-A",
+    division: "ا",
+    address: "السنينة",
+    parent: " حمود على ",
+    phone: "773219299",
+  },
 ];
 
 export function StudentsTable() {
   return (
-    <Card className="h-full w-full shadow-lg">
+    <Card className="h-full w-full drop-shadow-lg">
       <CardHeader floated={false} shadow={false} className="rounded-none bg-white">
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div className="flex w-full shrink-0 gap-2 md:w-max p-3">
@@ -90,8 +108,8 @@ export function StudentsTable() {
             </div>
             <Button className="flex items-center gap-3 bg-lime-700 text-white" size="sm">
               <ClickSpark>
-                <Link href="/userManagement/students/edite">
-              <div className="flex items-center gap-3 mt-0.5">
+                <Link href="/main/userManagement/student/edit">
+              <div className="flex items-center gap-3 mt-1">
                   <PlusIcon strokeWidth={2} className="h-4 w-4" /> إضافة
                   </div>
                 </Link>
@@ -99,7 +117,7 @@ export function StudentsTable() {
             </Button>
           </div>
           <div className="p-3 text-right">
-            <Typography variant="h5" color="blue-gray">
+            <Typography variant="h5" color="blue-gray ">
               قائمة الطلاب
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">

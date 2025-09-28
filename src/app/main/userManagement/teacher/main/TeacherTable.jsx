@@ -72,7 +72,7 @@ const TABLE_ROWS = [
   },
 ];
 
-export function StudentsTable() {
+export function TeacherTable() {
   return (
     <Card className="h-full w-full shadow-lg">
       <CardHeader floated={false} shadow={false} className="rounded-none bg-white">
@@ -89,15 +89,15 @@ export function StudentsTable() {
               />
             </div>
             <Button className="flex items-center gap-3 bg-lime-700 text-white" size="sm">
-              <ClickSpark>
-                <Link href="/userManagement/students/edite">
+              {/* <ClickSpark> */}
+                <Link href="/main/userManagement/teacher/edit">
               <div className="flex items-center gap-3 mt-0.5">
                   <PlusIcon strokeWidth={2} className="h-4 w-4" /> إضافة
                   </div>
                 </Link>
-              </ClickSpark>
+              {/* </ClickSpark> */}
             </Button>
-          </div>
+          </div> 
           <div className="p-3 text-right">
             <Typography variant="h5" color="blue-gray">
               قائمة الطلاب

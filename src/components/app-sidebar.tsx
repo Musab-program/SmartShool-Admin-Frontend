@@ -46,15 +46,15 @@ const items = [
     subItems: [
       {
         title: "الطلاب",
-        url: "/main/userManagement/students/main",
+        url: "/main/userManagement/student/main",
       },
       {
         title: "المعلمين",
-        url: "userManagement/teachers",
+        url: "/main/userManagement/teacher/main",
       },
       {
         title: "اولياء الامور",
-        url: "userManagement/guardian"
+        url: "/main/userManagement/guardian/main"
       },
     ],
   },
